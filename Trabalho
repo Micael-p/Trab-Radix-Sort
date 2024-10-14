@@ -1,0 +1,124 @@
+Introdução:
+O Radix Sort é um algoritmo de ordenação que trabalha processando os números (ou strings) dígito por dígito, ao invés de comparar diretamente os elementos. Ele organiza os itens em várias passagens, geralmente começando pelos dígitos menos significativos
+
+
+Classificação:
+O Radix Sort é um algoritmo de ordenação não comparativo que funciona organizando os números com base em seus dígitos, um dígito por vez.
+
+
+complexidade de tempo: O(NK) FORMULA bigO
+N= numero de elementos
+K= numero de digitos
+Complexidade de espaço Formula O(N+K):
+
+
+Isso o torna eficiente em termos de tempo para certos tipos de dados, mas o uso de memória deve ser levado em consideração, especialmente quando lidamos com listas muito grandes ou valores com muitos dígitos.
+
+Desempenho: É um algoritmo estavel que mantem a ordem relativa de elementos iguais
+Eficiente para grandes conjuntos de dados com k pequeno em relação a n; não usa comparações diretas.
+Mas requer representação adequada dos dados e espaço adicional
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TAMANHO 8
+
+void radix_sort(int arr[], int tamanho) {
+    int valor_max = arr[0];
+    // Encontrar o valor máximo no array
+    for(int i = 1; i < tamanho; i++) {
+        if(arr[i] > valor_max) {
+            valor_max = arr[i];
+        }
+    }
+
+    int exp = 1;  // A posição do dígito a ser processado (começa pelas unidades)
+    int *radix_array[10];
+    // Alocar espaço para 10 buckets (um para cada dígito de 0 a 9)
+    for(int i = 0; i < 10; i++) {
+        radix_array[i] = (int *)malloc(sizeof(int) * tamanho);  // Alocar memória para cada bucket
+    }
+    int counts[10] = {0};  // Contador para cada bucket (dígito)
+
+    // Iterar sobre cada dígito (unidade, dezena, centena, etc.)
+    while (valor_max / exp > 0) {
+        // Distribuir os elementos nos buckets de acordo com o dígito atual
+        for(int i = 0; i < tamanho; i++) {
+            int radix_index = (arr[i] / exp) % 10;  // Obter o dígito correspondente
+            radix_array[radix_index][counts[radix_index]] = arr[i];  // Adicionar ao bucket correspondente
+            counts[radix_index]++;
+        }
+
+        int pos = 0;
+        // Recolher os elementos de volta para o array original, ordenados por esse dígito
+        for(int i = 0; i < 10; i++) {
+            for(int j = 0; j < counts[i]; j++) {
+                arr[pos] = radix_array[i][j];
+                pos++;
+            }
+            counts[i] = 0;  // Resetar o contador para o próximo dígito
+        }
+
+        exp *= 10;  // Avançar para o próximo dígito (dezena, centena, etc.)
+    }
+
+    // Liberar a memória alocada para os buckets
+    for(int i = 0; i < 10; i++) {
+        free(radix_array[i]);
+    }
+}
+
+int main() {
+    int arr[TAMANHO] = {170, 45, 75, 90, 802, 24, 2, 66};
+    printf("Array original: ");
+    for(int i = 0; i < TAMANHO; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    radix_sort(arr, TAMANHO);  // Chamar o algoritmo de ordenação Radix Sort
+
+    printf("Array ordenado: ");
+    for(int i = 0; i < TAMANHO; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+
+
+
+
+Questão 1:
+Sobre Radix sort marque a alternativa correta:
+A)O Radix sort usa numeros flutuantes para comparação:
+B)O Radix sort usa numeros inteiros sem nenhuma restrição:
+C)O Radix sort é um metodo comparativo:
+D)O Radix sort é um metodo não comparativo que usa qualquer tipo de dado:
+E)O Radix sort usa somente numeros inteiros positivos e strings:
+
+Resposta letra E: Pois das alternativas ela é a unica que esta correta, já que o radix sort é um metodo não comparativo o qual é possivel utilizar apenas inteiros positivos e strings.
+
+Questão 2:
+Qual é o processo básico do Radix Sort?
+A) Ordenar todos os elementos de uma vez.
+B) Classificar os números a partir do dígito mais significativo para o menos significativo.
+C) Classificar os números a partir do dígito menos significativo para o mais significativo.
+D) Usar um algoritmo de busca binária.
+E) Dividir a lista em duas metades e ordenar cada uma.
+
+Resposta letra C: O Radix Sort geralmente faz a classificação do digito menos significativo para o mais significativo em cada iteração
+ 
+Questão 3: 
+Qual das seguintes linguagens de programação é adequada para implementar o Radix Sort?
+A) Somente C.
+B) Somente Python.
+C) Somente Java.
+D) Qualquer linguagem que suporte arrays e loops.
+E) Somente Ruby.
+
+
+Resposta letra D: O Radix Sort pode ser implementado em qualquer linguagem que suporte arrays estruturas de controle, como loops, tornando-o amplamente aplicavel
